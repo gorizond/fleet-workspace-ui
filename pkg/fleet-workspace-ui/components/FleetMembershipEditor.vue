@@ -76,7 +76,6 @@ export default {
       loading: true,
       members: [],
       workspace: Object,
-      currentPrincipal: "",
       disableEdit: true,
     };
   },
@@ -92,7 +91,6 @@ export default {
     ...mapGetters(['currentCluster']),
   },
   async created() {
-    this.currentPrincipal = this.$store.getters['auth/principalId'];
     const fleetWorkspaceId = this.$route.params.id;
     [this.workspace] = await Promise.all([ this.$store.dispatch('management/find', {
       type: 'management.cattle.io.fleetworkspace',
@@ -114,7 +112,7 @@ export default {
             const parts = key.split('.');
             const principalId = `local://${parts[1]}`;
             const role = parts[2];
-            if (principalId === this.currentPrincipal && (role === 'admin' ||role === 'editor')) {
+            if (parts[1] === this.$store.getters['auth/v3User'].id && (role === 'admin' ||role === 'editor')) {
               disableEdit = false;
             }
             return {

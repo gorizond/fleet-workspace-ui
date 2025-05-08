@@ -34,7 +34,7 @@
         <template #add>
           <button
               type="button"
-              class="btn role-primary mt-10"
+              class="btn role-primary mt-10 "
               @click="openAddMemberDialog"
           >
             {{ t('generic.add') }}
@@ -108,15 +108,16 @@ export default {
       let disableEdit = true
       this.members = Object.entries(annotations)
           .filter(([key]) => key.startsWith('gorizond-user.'))
-          .map(([key]) => {
+          .map(([key, value]) => {
             const parts = key.split('.');
-            const principalId = `local://${parts[1]}`;
+            const userID = parts[1];
             const role = parts[2];
-            if (parts[1] === this.$store.getters['auth/v3User'].id && (role === 'admin' ||role === 'editor')) {
+            if (userID === this.$store.getters['auth/v3User'].id && (role === 'admin' ||role === 'editor')) {
               disableEdit = false;
             }
             return {
-              principalId: principalId,
+              principalId: value,
+              userID: userID,
               role: role,
             };
           });
@@ -133,16 +134,23 @@ export default {
       });
     },
     async addMember(principalId, role) {
-      const key = `gorizond-user.${principalId.split('//').pop()}.${role}`;
+      const principalIdSplit = principalId.split('://');
+      let value = principalId;
+      let key = `gorizond-user.${principalIdSplit[1]}.${role}`;
+      if (principalIdSplit[0] !== 'local') {
+        let random = Math.random().toString(36).substring(2) + Date.now();
+        key = `gorizond-principal.${random}.${role}`;
+        value = principalId;
+      }
       const annotations = {
         ...this.workspace.metadata.annotations,
-        [key]: Date.now(),
+        [key]: value,
       };
       await this.updateAnnotations(annotations);
     },
     async removeMember(index) {
       const member = this.members[index];
-      const key = `gorizond-user.${member.principalId.split('//').pop()}.${member.role}`;
+      const key = `gorizond-user.${member.userID}.${member.role}`;
       const annotations = { ...this.workspace.metadata.annotations };
       delete annotations[key];
       await this.updateAnnotations(annotations);

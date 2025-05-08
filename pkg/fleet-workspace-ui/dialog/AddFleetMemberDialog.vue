@@ -15,6 +15,7 @@ export default {
     return {
       selectedPrincipal: null,
       selectedRole: 'view',
+      newValue: '',
       options: [
         {
           label:       this.t('fleet-workspace-ui.roles.admin.label'),
@@ -33,6 +34,14 @@ export default {
         }
       ]
     };
+  },
+  watch: {
+    'newValue': {
+      handler(a, b) {
+        console.log(a, b);
+      },
+      deep: true,
+    },
   },
   methods: {
     onSelectPrincipal(principalId) {

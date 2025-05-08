@@ -82,6 +82,7 @@ export default {
       members: [],
       workspace: Object,
       disableEdit: true,
+      isAdmin: false,
     };
   },
   watch: {
@@ -105,9 +106,19 @@ export default {
       throw new Error('Failed to fetch fleet workspace');
     }
     await this.loadMembers();
+    this.checkAdminStatus();
     this.loading = false;
   },
   methods: {
+    checkAdminStatus() {
+      const labels = this.$store.getters['auth/v3User']?.labels;
+      if (labels) {
+        if (labels["authz.management.cattle.io/bootstrapping"] === "admin-user") {
+          this.isAdmin = true;
+          this.disableEdit = false;
+        }
+      }
+    },
     async loadMembers() {
       const annotations = this.workspace?.metadata?.annotations || {};
       let disableEdit = true
@@ -141,7 +152,11 @@ export default {
               role: role,
             };
           });
-      this.disableEdit = disableEdit;
+      if (this.isAdmin) {
+        this.disableEdit = false;
+      } else {
+        this.disableEdit = disableEdit;
+      }
       if (tmpMembers.length !== 0) {
         list = list.concat(tmpMembers);
       }
@@ -183,7 +198,7 @@ export default {
       await this.updateAnnotations(annotations);
     },
     async updateAnnotations(annotations) {
-      let oldannotations = this.workspace.metadata.annotations
+      let oldAnnotations = this.workspace.metadata.annotations
       try {
         this.workspace.metadata.annotations = annotations;
         await this.workspace.save();
@@ -192,7 +207,7 @@ export default {
           title:   'Error',
           message: error.message,
         }, { root: true });
-        this.workspace.metadata.annotations = oldannotations;
+        this.workspace.metadata.annotations = oldAnnotations;
       }
     },
   },

@@ -1,0 +1,15 @@
+plugin/fleet-workspace-ui-0.1.4.umd.min.209.js
+plugin/fleet-workspace-ui-0.1.4.umd.min.209.js.map
+plugin/fleet-workspace-ui-0.1.4.umd.min.284.js
+plugin/fleet-workspace-ui-0.1.4.umd.min.284.js.map
+plugin/fleet-workspace-ui-0.1.4.umd.min.37.js
+plugin/fleet-workspace-ui-0.1.4.umd.min.37.js.map
+plugin/fleet-workspace-ui-0.1.4.umd.min.417.js
+plugin/fleet-workspace-ui-0.1.4.umd.min.417.js.map
+plugin/fleet-workspace-ui-0.1.4.umd.min.968.js
+plugin/fleet-workspace-ui-0.1.4.umd.min.968.js.map
+plugin/fleet-workspace-ui-0.1.4.umd.min.dialog.js
+plugin/fleet-workspace-ui-0.1.4.umd.min.dialog.js.map
+plugin/fleet-workspace-ui-0.1.4.umd.min.js
+plugin/fleet-workspace-ui-0.1.4.umd.min.js.map
+plugin/package.json

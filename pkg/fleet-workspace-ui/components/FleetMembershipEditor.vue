@@ -11,23 +11,28 @@
         <template #column-headers>
           <div class="box mb-0">
             <div class="column-headers row">
-              <div class="col span-6">
+              <div class="col span-4">
                 <label class="text-label">{{ t('membershipEditor.user') }}</label>
               </div>
-              <div class="col span-6">
+              <div class="col span-4">
                 <label class="text-label">{{ t('membershipEditor.role') }}</label>
+              </div>
+              <div class="col span-4">
+                <label class="text-label">Type</label>
               </div>
             </div>
           </div>
         </template>
         <template #columns="{ row, i }">
-
           <div class="columns row">
-            <div class="col span-6">
+            <div class="col span-4">
               <Principal :value="row.value.principalId" />
             </div>
-            <div class="col span-6 role">
+            <div class="col span-4 role">
               {{ row.value.role }}
+            </div>
+            <div class="col span-4 role">
+              {{ row.value.type }}
             </div>
           </div>
         </template>
@@ -106,7 +111,8 @@ export default {
     async loadMembers() {
       const annotations = this.workspace?.metadata?.annotations || {};
       let disableEdit = true
-      this.members = Object.entries(annotations)
+      let list = []
+      let tmpMembers = Object.entries(annotations)
           .filter(([key]) => key.startsWith('gorizond-user.'))
           .map(([key, value]) => {
             const parts = key.split('.');
@@ -117,11 +123,32 @@ export default {
             }
             return {
               principalId: value,
-              userID: userID,
+              ID: userID,
+              type: "user",
+              role: role,
+            };
+          });
+      let tmpGroups = Object.entries(annotations)
+          .filter(([key]) => key.startsWith('gorizond-group.'))
+          .map(([key, value]) => {
+            const parts = key.split('.');
+            const group = parts[1];
+            const role = parts[2];
+            return {
+              principalId: value,
+              ID: group,
+              type: "group",
               role: role,
             };
           });
       this.disableEdit = disableEdit;
+      if (tmpMembers.length !== 0) {
+        list = list.concat(tmpMembers);
+      }
+      if (tmpGroups.length !== 0) {
+        list = list.concat(tmpGroups);
+      }
+      this.members = list
     },
     async openAddMemberDialog() {
       this.$store.dispatch('cluster/promptModal', {
@@ -150,7 +177,7 @@ export default {
     },
     async removeMember(index) {
       const member = this.members[index];
-      const key = `gorizond-user.${member.userID}.${member.role}`;
+      const key = `gorizond-${member.type}.${member.ID}.${member.role}`;
       const annotations = { ...this.workspace.metadata.annotations };
       delete annotations[key];
       await this.updateAnnotations(annotations);

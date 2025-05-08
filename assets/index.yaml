@@ -11,6 +11,25 @@ entries:
       catalog.cattle.io/ui-component: plugins
       catalog.cattle.io/ui-extensions-version: '>= 3.0.0 < 4.0.0'
     apiVersion: v2
+    appVersion: 0.1.3
+    created: "2025-05-08T13:18:09.16967409Z"
+    description: fleet-workspace-ui plugin
+    digest: 1bd022e017f803ba99fc011f2906ead5e6a8e084466f5370affb9ece26706d53
+    name: fleet-workspace-ui
+    type: application
+    urls:
+    - assets/fleet-workspace-ui/fleet-workspace-ui-0.1.3.tgz
+    version: 0.1.3
+  - annotations:
+      catalog.cattle.io/certified: rancher
+      catalog.cattle.io/namespace: cattle-ui-plugin-system
+      catalog.cattle.io/os: linux
+      catalog.cattle.io/permits-os: linux, windows
+      catalog.cattle.io/rancher-version: '>= 2.10.0'
+      catalog.cattle.io/scope: management
+      catalog.cattle.io/ui-component: plugins
+      catalog.cattle.io/ui-extensions-version: '>= 3.0.0 < 4.0.0'
+    apiVersion: v2
     appVersion: 0.1.2
     created: "2025-05-08T09:49:33.69344476Z"
     description: fleet-workspace-ui plugin
@@ -58,4 +77,4 @@ entries:
     urls:
     - assets/fleet-workspace-ui/fleet-workspace-ui-0.1.0.tgz
     version: 0.1.0
-generated: "2025-05-08T09:49:33.693103752Z"
+generated: "2025-05-08T13:18:09.168995793Z"

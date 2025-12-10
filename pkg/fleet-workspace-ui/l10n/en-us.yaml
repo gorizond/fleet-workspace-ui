@@ -18,3 +18,7 @@ fleet-workspace-ui:
     view:
       label: View
       description: View is read only for Fleet workspace.
+  workspacePrefix:
+    message: Workspace names are automatically prefixed with {prefix}.
+    preview: Resulting workspace name {name}
+
